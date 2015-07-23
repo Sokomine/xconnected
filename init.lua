@@ -216,7 +216,7 @@ end
 
 
 -- emulate xpanes
-xconnected.register_pane = function( name, tiles )
+xconnected.register_pane = function( name, tiles, def )
 	local node_box_data = xconnected.construct_node_box_data(
 		-- a half-pane
 		{{-1/32, -0.5, 0,     1/32, 0.5, 0.5}},
@@ -229,16 +229,19 @@ xconnected.register_pane = function( name, tiles )
 		{{-0.06, -0.5, 0,     0.06, 0.5, 0.5}},
 		{},
 		{{-0.06, -0.5, -0.5,  0.06, 0.5, 0.5}});
-	xconnected.register( name,
-		{
+	if( not( def )) then
+		def = {
 			description = name.." Pane",
 			textures = {tiles,tiles,tiles,tiles},
 			is_ground_content = false,
 			sunlight_propagates = true,
 			use_texture_alpha = true,
---			sounds = default.node_sound_glass_defaults(),
+			sounds = default.node_sound_glass_defaults(),
 			groups = {snappy=2, cracky=3, oddly_breakable_by_hand=3, pane=1},
-		},
+		};
+	end
+	xconnected.register( name,
+		def,
 		-- node boxes (last one: full one)
 		node_box_data,
 		-- selection boxes (last one: full one)
@@ -248,7 +251,7 @@ xconnected.register_pane = function( name, tiles )
 -- TODO: register_craft would be needed as well (for backwards compatibility)
 end
 
-xconnected.register_wall = function( name, tiles )
+xconnected.register_wall = function( name, tiles, def )
 	local node_box_data = xconnected.construct_node_box_data(
 		-- one extension
 		{{-3/16, -0.5,    0,  3/16,  5/16, 0.5}},
@@ -261,15 +264,18 @@ xconnected.register_wall = function( name, tiles )
 		{{-0.2, -0.5, 0,     0.2,  5/16, 0.5}},
 		{{-0.25, -0.5, -0.25, 0.25, 0.5, 0.25 }},
 		{{-0.2, -0.5, -0.5,  0.2, 5/16, 0.5}});
-	xconnected.register( name,
-		{ 
+	if( not( def )) then
+		def = { 
 			description = name.." Wall",
 			textures = {tiles,tiles,tiles,tiles},
 			is_ground_content = false,
 			sunlight_propagates = true,
---			sounds = default.node_sound_stone_defaults(),
-			groups = {snappy=2, cracky=3, oddly_breakable_by_hand=3, pane=1},
-		},
+			sounds = default.node_sound_stone_defaults(),
+			groups = {cracky=3, stone=1, pane=1},
+		};
+	end
+	xconnected.register( name,
+		def,
 		node_box_data,
 		selection_box_data
 		);
@@ -277,7 +283,7 @@ end
 
 
 
-xconnected.register_fence = function( name, tiles )
+xconnected.register_fence = function( name, tiles, def )
 	local node_box_data = xconnected.construct_node_box_data(
 		-- one extension
     		{{-0.06,  0.25, 0, 0.06, 0.4, 0.5},
@@ -292,15 +298,18 @@ xconnected.register_fence = function( name, tiles )
 		{},
 		{{-0.2, -0.5, -0.2, 0.2, 0.5, 0.2}},
 		{{-0.2, -0.5, -0.2, 0.2, 0.5, 0.2}});
-	xconnected.register( name,
-		{ 
+	if( not( def )) then
+		def = { 
 			description = name.." Wall",
 			textures = {tiles,tiles,tiles,tiles},
 			is_ground_content = false,
 			sunlight_propagates = true,
---			sounds = default.node_sound_stone_defaults(),
-			groups = {snappy=2, cracky=3, oddly_breakable_by_hand=3, pane=1},
-		},
+			sounds = default.node_sound_stone_defaults(),
+			groups = {snappy=2, cracky=3, oddly_breakable_by_hand=2, pane=1, flammable=2},
+		};
+	end
+	xconnected.register( name,
+		def,
 		node_box_data,
 		selection_box_data
 		);
