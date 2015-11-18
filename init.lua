@@ -35,6 +35,30 @@ local directions = {
 }
 
 
+-- this function is called when a middle node (connected to two other ones on opposing sides)
+-- is punched with a normal node of that type (the _c4 variant)
+xconnected.on_punch = function( pos, node, puncher, pointed_thing )
+	if( not( puncher ) or not( puncher:get_wielded_item() )) then
+		return;
+	end
+	local wielded = puncher:get_wielded_item():get_name();
+	if( not( wielded )
+	   or wielded == ""
+	   or not( node )
+	   or not( node.name )
+	   or not( minetest.registered_items[ wielded ] )
+	   or not( minetest.registered_items[ node.name ] )) then
+		return;
+	end
+	-- if the node is a middle one, swap between the version with a middle post and without
+	local base_name = string.sub( wielded, 1, string.len( wielded )-3 );
+	if(     node.name == base_name.."_ln" ) then
+		minetest.swap_node( pos, {name=base_name.."_lp", param2=node.param2});
+	elseif( node.name == base_name.."_lp" ) then
+		minetest.swap_node( pos, {name=base_name.."_ln", param2=node.param2});
+	end
+end
+
 -- each node depends on the position and amount of neighbours of the same type;
 -- the param2 value of the neighbour is not important here
 xconnected_update_one_node = function( pos, name, digged )
@@ -101,7 +125,7 @@ xconnected_update = function( pos, name, active, has_been_digged )
 end
 
 -- def: that part of the node definition that is shared between all nodes
--- node_box_data: has to be a table that contains defs for   "c0", "c1", "c2", "c3", "c4", "ln"
+-- node_box_data: has to be a table that contains defs for   "c0", "c1", "c2", "c3", "c4", "ln" (optionally "lp")
 -- c<nr>: node is connected to that many neighbours clockwise
 -- ln: node has 2 neighbours at opposite ends and forms a line with them
 xconnected.register = function( name, def, node_box_data, selection_box_data )
@@ -147,6 +171,11 @@ xconnected.register = function( name, def, node_box_data, selection_box_data )
 		-- update neighbours when this node is dug
 		new_def.after_dig_node = function(pos, oldnode, oldmetadata, digger)
 			return xconnected_update( pos, name.."_c4", true, true );
+		end
+
+		-- punching is used to swap nodes of type _ln and _lp
+		if( k=='ln' or k=='lp' ) then
+			new_def.on_punch = xconnected.on_punch;
 		end
 
 		-- actually register the node
@@ -211,6 +240,15 @@ xconnected.construct_node_box_data = function( node_box_list, center_node_box_li
 	end
 
 	res.ln = node_box_line;
+
+	res.lp = {}; -- like ln, but with a middle post
+	for _,v in pairs( node_box_line ) do
+		table.insert( res.lp, v );
+	end
+	for _,v in pairs( center_node_box_list ) do
+		table.insert( res.lp, v );
+	end
+
 	return res;
 end
 
