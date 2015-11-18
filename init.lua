@@ -254,11 +254,13 @@ end
 xconnected.register_wall = function( name, tiles, def )
 	local node_box_data = xconnected.construct_node_box_data(
 		-- one extension
-		{{-3/16, -0.5,    0,  3/16,  5/16, 0.5}},
+--		{{-3/16, -0.5,    0,  3/16,  5/16, 0.5}},
+		{{-3/16, -0.5-(3/16),    0,  3/16,  5/16, 0.5}},
 		-- the central part
 		{{-4/16, -0.5, -4/16, 4/16,  0.5, 4/16 }},
 		-- neighbours on two opposide sides
-		{{-3/16, -0.5,  -0.5, 3/16, 5/16, 0.5}});
+--		{{-3/16, -0.5,  -0.5, 3/16, 5/16, 0.5}});
+		{{-3/16, -0.5-(3/16),  -0.5, 3/16, 5/16, 0.5}});
 	local selection_box_data =
 		xconnected.construct_node_box_data(
 		{{-0.2, -0.5, 0,     0.2,  5/16, 0.5}},
