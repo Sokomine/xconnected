@@ -1,6 +1,9 @@
 
 xconnected = {}
 
+-- change the drops value if you want the player to get one of the other node types when digged (i.e. c0 or ln or lp)
+local drops = "c4";
+
 -- this table contains the new postfix and param2 for a newly placed node
 -- depending on its neighbours
 local xconnected_get_candidate = {};
@@ -136,7 +139,7 @@ xconnected.register = function( name, def, node_box_data, selection_box_data, cr
 		def.paramtype  = "light";
 		def.paramtype2 = "facedir";
 		-- similar xconnected nodes are identified by having the same drop
-		def.drop = name.."_c4";
+		def.drop = name.."_"..drops; -- default: "_c4";
 		-- nodebox and selection box have been calculated using smmyetry
 		def.node_box = {
 			type = "fixed",
@@ -159,10 +162,10 @@ xconnected.register = function( name, def, node_box_data, selection_box_data, cr
 		end
 
 		local new_def = minetest.deserialize( minetest.serialize( def ));
-		if( k=='c4' ) then
+		if( k==drops ) then
 			-- update nodes when needed
 			new_def.on_construct = function( pos )
-				return xconnected_update( pos, name.."_c4", true, nil );
+				return xconnected_update( pos, name.."_"..drops, true, nil );
 			end
 		else
 			-- avoid spam in creative inventory
@@ -170,7 +173,7 @@ xconnected.register = function( name, def, node_box_data, selection_box_data, cr
 		end
 		-- update neighbours when this node is dug
 		new_def.after_dig_node = function(pos, oldnode, oldmetadata, digger)
-			return xconnected_update( pos, name.."_c4", true, true );
+			return xconnected_update( pos, name.."_"..drops, true, true );
 		end
 
 		-- punching is used to swap nodes of type _ln and _lp
@@ -184,7 +187,7 @@ xconnected.register = function( name, def, node_box_data, selection_box_data, cr
 
 	if( craft_from ) then
 		minetest.register_craft({
-			output = name.."_c4 6",
+			output = name.."_"..drops.." 6",
 			recipe = {
 				{craft_from, craft_from, craft_from},
 				{craft_from, craft_from, craft_from}
