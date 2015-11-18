@@ -382,7 +382,6 @@ xconnected.register_fence('xconnected:fence_jungle', 'default_junglewood.png');
 xconnected.register_fence('xconnected:fence_acacia', 'default_acacia_wood.png');
 
 
---[[
 -- this innocent loop creates quite a lot of nodes - but only if you have the stained_glass mod installed
 if(    minetest.get_modpath( "stained_glass" )
    and minetest.global_exists( stained_glass_hues)
@@ -394,4 +393,3 @@ if(    minetest.get_modpath( "stained_glass" )
 		end
 	end
 end
---]]
