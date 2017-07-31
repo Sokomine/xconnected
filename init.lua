@@ -32,6 +32,7 @@ xconnected.register_fence('xconnected:fence',        'default_wood.png',        
 xconnected.register_fence('xconnected:fence_pine',   'default_pine_wood.png',   'default:pine_wood');
 xconnected.register_fence('xconnected:fence_jungle', 'default_junglewood.png',  'default:junglewood');
 xconnected.register_fence('xconnected:fence_acacia', 'default_acacia_wood.png', 'default:acacia_wood');
+xconnected.register_fence('xconnected:fence_aspen',  'default_aspen_wood.png',  'default:aspen_wood');
 
 --[[
 -- this innocent loop creates quite a lot of nodes - but only if you have the stained_glass mod installed
