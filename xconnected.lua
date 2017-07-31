@@ -160,6 +160,8 @@ xconnected.register = function( name, def, node_box_data, selection_box_data, cr
 		else
 			def.groups.xconnected = 1;
 		end
+		-- that group apparently got a new meaning
+		def.groups.pane = nil;
 
 		local new_def = minetest.deserialize( minetest.serialize( def ));
 		if( k==drops ) then
@@ -288,7 +290,7 @@ xconnected.register_pane = function( name, tiles, craft_from, def )
 			sunlight_propagates = true,
 			use_texture_alpha = true,
 			sounds = default.node_sound_glass_defaults(),
-			groups = {snappy=2, cracky=3, oddly_breakable_by_hand=3, pane=1},
+			groups = {snappy=3, cracky=3, oddly_breakable_by_hand=3},
 		};
 	end
 	xconnected.register( name,
@@ -324,7 +326,7 @@ xconnected.register_wall = function( name, tiles, craft_from, def )
 			is_ground_content = false,
 			sunlight_propagates = true,
 			sounds = default.node_sound_stone_defaults(),
-			groups = {cracky=3, stone=1, pane=1},
+			groups = {cracky=3, stone=2},
 		};
 	end
 	xconnected.register( name,
@@ -360,7 +362,7 @@ xconnected.register_fence = function( name, tiles, craft_from, def )
 			is_ground_content = false,
 			sunlight_propagates = true,
 			sounds = default.node_sound_stone_defaults(),
-			groups = {snappy=2, cracky=3, oddly_breakable_by_hand=2, pane=1, flammable=2},
+			groups = {snappy=3, cracky=3, oddly_breakable_by_hand=3},
 		};
 	end
 	xconnected.register( name,
