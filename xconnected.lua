@@ -203,7 +203,7 @@ xconnected.register = function( name, def, node_box_data, selection_box_data, cr
 			output = name.."_"..drops.." 6",
 			recipe = {
 				{craft_from, craft_from, craft_from},
-				{craft_from, craft_from, craft_from}
+				{'default:stick', craft_from, 'default:stick'},
 			}
 		})
 	end
