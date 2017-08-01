@@ -1,6 +1,9 @@
 
 xconnected = {}
 
+-- if unifieddyes or morecolor is installed, use colorfacedir
+xconnected.with_color = minetest.get_modpath( "unifieddyes") or minetest.get_modpath("morecolor");
+
 -- change the drops value if you want the player to get one of the other node types when digged (i.e. c0 or ln or lp)
 local drops = "c4";
 
@@ -101,12 +104,15 @@ xconnected_update_one_node = function( pos, name, digged )
 	end
 	local new_node = xconnected_get_candidate[ id ];
 	if( new_node and new_node[1] ) then
+		local node = minetest.get_node(pos);
+		-- support for coloredfacedir
+		local p2_color = node.param2 - (node.param2 % 32);
 		local new_name = string.sub( name, 1, string.len( name )-3 )..new_node[1];
 		if(     new_name and minetest.registered_nodes[ new_name ]) then
-			minetest.swap_node( pos, {name=new_name, param2=new_node[2] });
+			minetest.swap_node( pos, {name=new_name, param2=new_node[2] + p2_color });
 		-- if no central node without neighbours is defined, take the c4 variant
 		elseif( new_node[1]=='_c0' and not( minetest.registered_nodes[ new_name ])) then
-			minetest.swap_node( pos, {name=name,     param2=0 });
+			minetest.swap_node( pos, {name=name,     param2=p2_color });
 		end
 	end
 	return candidates;
@@ -137,7 +143,12 @@ xconnected.register = function( name, def, node_box_data, selection_box_data, cr
 		-- some common values for all xconnected nodes
 		def.drawtype   = "nodebox";
 		def.paramtype  = "light";
-		def.paramtype2 = "facedir";
+		if( xconnected.with_color ) then
+			def.paramtype2 = "colorfacedir";
+			def.palette = "unifieddyes_palette_colorwallmounted.png";
+		else
+			def.paramtype2 = "facedir";
+		end
 		-- similar xconnected nodes are identified by having the same drop
 		def.drop = name.."_"..drops; -- default: "_c4";
 		-- nodebox and selection box have been calculated using smmyetry
