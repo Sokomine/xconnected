@@ -2,7 +2,9 @@
 xconnected = {}
 
 -- if unifieddyes or morecolor is installed, use colorfacedir
-xconnected.with_color = minetest.get_modpath( "unifieddyes") or minetest.get_modpath("morecolor");
+xconnected.with_unifieddyes = minetest.get_modpath( "unifieddyes");
+-- morecolor adds less colors than unifieddyes (but more than none)
+xconnected.with_morecolor = minetest.get_modpath( "morecolor");
 
 -- change the drops value if you want the player to get one of the other node types when digged (i.e. c0 or ln or lp)
 local drops = "c4";
@@ -143,7 +145,10 @@ xconnected.register = function( name, def, node_box_data, selection_box_data, cr
 		-- some common values for all xconnected nodes
 		def.drawtype   = "nodebox";
 		def.paramtype  = "light";
-		if( xconnected.with_color ) then
+		if( xconnected.with_morecolor ) then
+			def.paramtype2 = "colorfacedir";
+			def.palette = "colorfacedir_palette.png";
+		elseif( xconnected.with_unifieddyes ) then
 			def.paramtype2 = "colorfacedir";
 			def.palette = "unifieddyes_palette_colorwallmounted.png";
 		else
